@@ -33,18 +33,18 @@ private variable α β ρ 𝓥 : Level
 \end{code}
 
 Here is a function that is useful for defining poitwise equality of functions wrt a given equality
-(see, e.g., the definition of `_≈̇_` in the [Residuation.Properties][] module).
+(see, e.g., the definitions of `_≈̇A_` and `_≈̇B_` in the [Base.Adjunction.Residuation][] module).
 
 \begin{code}
 
-PointWise : {A : Type α}{B : Type β }
-            (_≋_ : BinRel B ρ) → BinRel (A → B) _
-PointWise {A = A}{B} _≋_ = λ (f g : A → B) → ∀ x → f x ≋ g x
+module _ {A : Type α} where
 
-depPointWise : {A : Type α}{B : A → Type β }
-               (_≋_ : {γ : Level}{C : Type γ} → BinRel C ρ)
- →             BinRel ((a : A) → B a) _
-depPointWise {A = A}{B} _≋_ = λ (f g : (a : A) → B a) → ∀ x → f x ≋ g x
+ PointWise : {B : Type β }(_≋_ : BinRel B ρ) → BinRel (A → B) (α ⊔ ρ)
+ PointWise {B = B} _≋_ = λ (f g : A → B) → ∀ x → f x ≋ g x
+
+ depPointWise :  {B : A → Type β }(_≋_ : {γ : Level}{C : Type γ} → BinRel C ρ)
+  →              BinRel ((a : A) → B a) (α ⊔ ρ)
+ depPointWise {B = B} _≋_ = λ (f g : (a : A) → B a) → ∀ x → f x ≋ g x
 
 \end{code}
 
@@ -53,10 +53,18 @@ is contained in a predicate, the second argument (a "subset" of the codomain).
 
 \begin{code}
 
-Im_⊆_ : {A : Type α}{B : Type β} → (A → B) → Pred B ρ → Type (α ⊔ ρ)
-Im f ⊆ S = ∀ x → f x ∈ S
+ Im_⊆_ : {B : Type β } → (A → B) → Pred B ρ → Type (α ⊔ ρ)
+ Im f ⊆ S = ∀ x → f x ∈ S
 
 \end{code}
+
+The analog of `PointWise` for dependent function types is the following.
+
+\begin{code}
+
+
+\end{code}
+
 
 
 #### <a id="operation-symbols-unary-relations-binary-relations">Operation symbols, unary relations, binary relations</a>
@@ -71,8 +79,8 @@ Sometimes it is useful to obtain the underlying type of a predicate.
 
 \begin{code}
 
-PredType : {A : Type α} → Pred A ρ → Type α
-PredType {A = A} _ = A
+ PredType : Pred A ρ → Type α
+ PredType _ = A
 
 \end{code}
 
@@ -97,8 +105,8 @@ BinRel A ℓ' = REL A A ℓ'
 
 \begin{code}
 
-Level-of-Rel : {A : Type α}{ℓ : Level} → BinRel A ℓ → Level
-Level-of-Rel {A = A}{ℓ} _ = ℓ
+ Level-of-Rel : {ℓ : Level} → BinRel A ℓ → Level
+ Level-of-Rel {ℓ = ℓ} _ = ℓ
 
 \end{code}
 
@@ -112,30 +120,30 @@ to be an inhabitant of a (binary) relation type, or a (unary) predicate type.
 
 \begin{code}
 
-module _ {A : Type α}{B : Type β} where
+ module _ {B : Type β} where
 
- ker : (A → B) → BinRel A β
- ker g x y = g x ≡ g y
+  ker : {B : Type β} → (A → B) → BinRel A β
+  ker g x y = g x ≡ g y
 
- kerRel : {ρ : Level} → BinRel B ρ → (A → B) → BinRel A ρ
- kerRel _≈_ g x y = g x ≈ g y
+  kerRel : {ρ : Level} → BinRel B ρ → (A → B) → BinRel A ρ
+  kerRel _≈_ g x y = g x ≈ g y
 
- kernelRel : {ρ : Level} → BinRel B ρ → (A → B) → Pred (A × A) ρ
- kernelRel _≈_ g (x , y) = g x ≈ g y
+  kernelRel : {ρ : Level} → BinRel B ρ → (A → B) → Pred (A × A) ρ
+  kernelRel _≈_ g (x , y) = g x ≈ g y
 
- open IsEquivalence
+  open IsEquivalence
 
- kerRelOfEquiv : {ρ : Level}{R : BinRel B ρ} → IsEquivalence R → (h : A → B) → IsEquivalence (kerRel R h)
- kerRelOfEquiv eqR h = record { refl = refl eqR ; sym = sym eqR ; trans = trans eqR }
+  kerRelOfEquiv : {ρ : Level}{R : BinRel B ρ} → IsEquivalence R → (h : A → B) → IsEquivalence (kerRel R h)
+  kerRelOfEquiv eqR h = record { refl = refl eqR ; sym = sym eqR ; trans = trans eqR }
 
- kerlift : (A → B) → (ρ : Level) → BinRel A (β ⊔ ρ)
- kerlift g ρ x y = Lift ρ (g x ≡ g y)
+  kerlift : (A → B) → (ρ : Level) → BinRel A (β ⊔ ρ)
+  kerlift g ρ x y = Lift ρ (g x ≡ g y)
 
- ker' : (A → B) → (I : Type 𝓥) → BinRel (I → A) (β ⊔ 𝓥)
- ker' g I x y = g ∘ x ≡ g ∘ y
+  ker' : (A → B) → (I : Type 𝓥) → BinRel (I → A) (β ⊔ 𝓥)
+  ker' g I x y = g ∘ x ≡ g ∘ y
 
- kernel : (A → B) → Pred (A × A) β
- kernel g (x , y) = g x ≡ g y
+  kernel : (A → B) → Pred (A × A) β
+  kernel g (x , y) = g x ≡ g y
 
 
 -- The *identity relation* (equivalently, the kernel of a 1-to-1 function)
