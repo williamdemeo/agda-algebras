@@ -20,7 +20,7 @@ Our first attempt to formalize Birkhoff's theorem
 suffered from two flaws.\footnote{See the
  \href{https://github.com/ualib/ualib.github.io/blob/71f173858701398d56224dd79d152c380c0c2b5e/src/lagda/UALib/Birkhoff.lagda}{\textsf{Birkhoff.lagda}} file
  in the \href{https://github.com/ualib/ualib.github.io}{\textsf{ualib/ualib.gitlab.io}}
- repository (\href{https://github.com/ualib/ualib.github.io/commit/71f173858701398d56224dd79d152c380c0c2b5e}{15
+ repository (\href{https://github.com/ualib/ualib.github.io/tree/71f173858701398d56224dd79d152c380c0c2b5e}{15
  Jan 2021 commit 71f1738})~\cite{ualib_v1.0.0}.}
 First, we assumed function extensionality in \mltt; consequently, it was unclear whether the formalization was fully constructive.  Second, an inconsistency could be
 contrived by taking the type \ab{X}, representing an arbitrary collection of
@@ -1134,19 +1134,6 @@ cong (Algebra.Interp (𝑻 X)) (≡.refl , ss≃ts) = gnl ss≃ts
 %\paragraph*{Substitution, environments and interpretation of terms}
 \paragraph*{Environments and interpretation of terms}
 
-\begin{comment}
-Recall that the domain of an algebra \ab{𝑨} is a setoid, which we denote by \af{𝔻[~\ab{𝑨}~]}, whose carrier is that of \ab{𝑨} (denoted \af{𝕌[~\ab{𝑨}~]}) and whose equivalence relation represents equality of elements in \af{𝕌[~\ab{𝑨}~]}. \af{Sub} performs substitution from one context to another; specifically, if \ab X, \ab Y are contexts, then \af{Sub} \ab X \ab Y assigns a term in \ab X to each symbol in \ab Y.
-begin{code}
--- Sub : Type χ → Type χ → Type _
--- Sub X Y = (y : Y) → Term X
-end{code}
-A substitution \ab{σ} applied to a term \ab t is denoted by \af{[~\ab{σ}~]} \ab t.
-begin{code}
--- [_]_ : {X Y : Type χ} → Sub X Y → Term Y → Term X
--- [ σ ] (ℊ x) = σ x
--- [ σ ] (node f ts) = node f λ i → [ σ ] (ts i)
-end{code}
-\end{comment}
 Fix a signature \ab{𝑆} and a context \ab X.
 %The next two types are defined relative to a fixed \ab{𝑆}-algebra, say, \ab{𝑨}, so
 %we place them in a submodule that takes the algebra as given.
@@ -1204,15 +1191,6 @@ We reproduce them here to keep the paper self-contained.
  transᵉ  EqualIsEquiv = λ ij jk ρ  → trans (ij ρ) (jk ρ)
 \end{code}
 \fi
-\begin{comment}
-Another useful fact we will need is that substitution and evaluation commute; that is, applying substitution \ab{σ} to a term \ab{t} and evaluating the result in environment \ab{ρ} has the same effect as evaluating \ab{t} in the environment \as{λ} \ab x \as{→} \aof{⟦~\ab{σ}~\ab{x}~⟧}~\aofld{⟨\$⟩} \ab{ρ} (see~\cite{Abel:2021} or~\cite[Lem.~3.3.11]{Mitchell:1996}).
-begin{code}
- -- substitution :  {X Y : Type χ} → (t : Term Y) (σ : Sub X Y) (ρ : Carrier( Env X ) )
- --  →              ⟦ [ σ ] t ⟧ ⟨$⟩ ρ ≈ ⟦ t ⟧ ⟨$⟩ (λ x → ⟦ σ x ⟧ ⟨$⟩ ρ)
- -- substitution    (ℊ x)        σ ρ = refl
- -- substitution    (node f ts)  σ ρ = cong (Interp 𝑨)(≡.refl , λ i → substitution (ts i) σ ρ)
-end{code}
-\end{comment}
 %% -----------------------------------------------------------------------------
 
 \paragraph*{Compatibility of terms}
@@ -1932,12 +1910,8 @@ type was unconstrained; it is meant to represent the informal notion of a ``suff
 domains of all algebras in the class under consideration.
 %The quantifiers were in the wrong order!
 But then, given a signature \ab{𝑆} and a one-element \ab{𝑆}-algebra \ab{𝑨},
-by choosing \ab X to be the empty type \ab{⊥}, our surjectivity postulate gives a map from \ab{⊥} onto the singleton domain of \ab{𝑨}. (For details, see the \href{https://github.com/ualib/agda-algebras/blob/master/src/Demos/ContraX.lagda}{\am{Demos.ContraX}} module which constructs the counterexample in \agda.)
+by choosing \ab X to be the empty type \ab{⊥}, our surjectivity postulate gives a map from \ab{⊥} onto the singleton domain of \ab{𝑨}. (For details, see the \href{https://github.com/ualib/agda-algebras/blob/af4ab7a3bb415649dad398b4f43f3b79aeaddbfc/src/Demos/ContraX.lagda}{\am{Demos.ContraX}} module which constructs the counterexample in \agda.)
 
-\begin{comment}
-The inconsistency in our first effort to formalize Birkhoff's theorem was due to careless handling of the type \ab X of variable symbols.  Specifically, we had allowed \ab X to be any type whatever. Informally, \ab X is a ``sufficiently large'' collection of variable symbols and, in our first formal statement of Birkhoff's theorem, we made the following assumption: (h1) there exist surjections from \ab X to the domain of every algebra in the class under consideration.  Informally, this isn't a problem if we view (h1) as implicitly requiring that \ab X be a type for which such surjections could possibly exist.  Technically, however, by exploiting the freedom to choose \ab X arbitrarily, a contradiction can be contrived.  Specifically, if we take \ab X to be the empty type and take the one-element \ab{𝑆}-algebra. By (h1), there is a surjective map from the empty type to a nonempty type, which is clearly a contradiction.
-(See the \href{https://github.com/ualib/agda-algebras/blob/master/src/Demos/ContraX.lagda}{\am{Demos.ContraX}} module in the \agdaalgebrasrepo repository for the formal counterexample.)
-\end{comment}
 
 %% -----------------------------------------------------------------------------
 \section{Related work}
