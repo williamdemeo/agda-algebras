@@ -86,7 +86,7 @@ To best emulate \mltt, we use
   See the \href{https://agda.readthedocs.io/en/v2.6.1/tools/command-line-options.html#cmdoption-safe}{cmdoption-safe} section of~\cite{agdaref-safeagda}.
   \end{itemize}
 \fi    %%% END LONG VERSION ONLY
-We also make use of the following definitions from \agda's standard library (ver.~1.7).
+
 \begin{code}[hide]
 {-# OPTIONS --without-K --exact-split --safe #-}
 \end{code}
@@ -97,8 +97,6 @@ We also make use of the following definitions from \agda's standard library (ver
 open import Base.Algebras.Basic using ( 𝓞 ; 𝓥 ; Signature )
 module Demos.HSP {𝑆 : Signature 𝓞 𝓥} where
 \end{code}
-\fi    %%% END LONG VERSION ONLY
-{\small
 \begin{code}
 
 -- Import 16 definitions from the Agda Standard Library.
@@ -110,7 +108,7 @@ open import  Relation.Binary.Definitions  using ( Reflexive ; Symmetric ; Transi
 open import  Relation.Binary.PropositionalEquality  using ( _≡_                                     )
 open import  Relation.Unary               using ( Pred ; _⊆_ ; _∈_                                  )
 
--- -- Import 23 definitions from the Agda Standard Library and rename 12 of them.
+-- Import 23 definitions from the Agda Standard Library and rename 12 of them.
 open import  Agda.Primitive  renaming  ( Set    to Type    )  using  ( _⊔_ ; lsuc                   )
 open import  Data.Product    renaming  ( proj₁  to fst     )  using  ( _×_ ; _,_ ; Σ ; Σ-syntax     )
                              renaming  ( proj₂  to snd     )
@@ -132,10 +130,10 @@ import       Relation.Binary.Reasoning.Setoid       as   SetoidReasoning
 private variable α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ ρ χ ℓ : Level ;       Γ Δ : Type χ
 
 \end{code}
-}
-\noindent The above imports include some adjustments to ``standard'' \agda syntax; in particular,
-we use \AgdaPrimitive{Type} in place of \AgdaPrimitive{Set}, the infix long arrow symbol,
-\AgdaRecord{\AgdaUnderscore{}⟶\AgdaUnderscore{}}, in place of \AgdaRecord{Func} (the type of ``setoid functions,'' discussed in §\ref{setoid-functions} below), and the symbol \aofld{\au{}⟨\$⟩\au{}} in place of \afld{f} (application of the map of a setoid function); we use
+\fi    %%% END LONG VERSION ONLY
+
+We also use some definitions from \agda's standard library (ver.~1.7). As shown in Appendix §\ref{sec:appendix}, these are imported using the \AgdaKeyword{open} \AgdaKeyword{import} directive and they include some adjustments to ``standard'' \agda syntax. In particular, we use \AgdaPrimitive{Type} in place of \AgdaPrimitive{Set}, the infix long arrow symbol,
+\AgdaRecord{\AgdaUnderscore{}⟶\AgdaUnderscore{}}, in place of \AgdaRecord{Func} (the type of ``setoid functions,'' discussed in §\ref{setoid-functions}), and the symbol \aofld{\au{}⟨\$⟩\au{}} in place of \afld{f} (application of the map of a setoid function); we use
 \AgdaField{fst} and \AgdaField{snd}, and sometimes \AgdaOperator{\AgdaFunction{∣\AgdaUnderscore{}∣}} and
 \AgdaOperator{\AgdaFunction{∥\AgdaUnderscore{}∥}}, to denote the first and second
 projections out of the product type
@@ -175,7 +173,7 @@ This required postulating function extensionality,%
 \footnote{the axiom asserting that two point-wise equal functions are equal} which is
 known to be independent from \mltt~\cite{MHE, MHE:2019}; this was unsatisfactory as %we were curious to see if
 we aimed to show that the theorems hold directly in \mltt without extra axioms.
-The present work makes no appeal to functional extensionality or classical axioms like Choice or Excluded Middle.\footnote{All submodules of the \am{Setoid} module in the \agdaalgebras library are also fully constructive in this sense.}
+The present work makes no appeal to functional extensionality or classical axioms like Choice or Excluded Middle.%\footnote{All submodules of the \am{Setoid} module in the \agdaalgebras library are also fully constructive in this sense.}
 
 
 %% -----------------------------------------------------------------------------
@@ -220,7 +218,7 @@ module _ {𝑨 : Setoid α ρᵃ}{𝑩 : Setoid β ρᵇ} where
 An inhabitant of the \aod{Image} \ab f \aod{∋} \ab b type is a point \ab a~\as :~\afld{Carrier}\ab{𝑨},
 along with a proof \ab p~\as :~\ab b~\af{≈}~\ab f~\ab a, that \ab f maps \ab a to \ab b.
 Since a proof of \aod{Image} \ab f \aod{∋} \ab b must include a concrete witness \ab a~\as :~\afld{Carrier}~\ab{𝑨}, we can actually \emph{compute} a range-restricted right-inverse of \ab f.
-Here is the definition of \af{Inv} which, for extra certainty, is accompanied by a proof that it gives a right-inverse.
+Here is the definition of \af{Inv} accompanied by a proof that it gives a right-inverse.
 
 \begin{code}
 
@@ -229,6 +227,7 @@ Here is the definition of \af{Inv} which, for extra certainty, is accompanied by
 
  InvIsInverseʳ : {f : 𝑨 ⟶ 𝑩}{b : B}(q : Image f ∋ b) → f ⟨$⟩ (Inv f q) ≈ b
  InvIsInverseʳ (eq _ p) = sym p
+
 \end{code}
 %
 \ifshort\else
@@ -944,7 +943,7 @@ Another theorem in the \agdaalgebras library, called \af{HomFactor}, formalizes 
 \aof{⊆} \af{ker} \ab g, then there exists \ab{φ} : \af{hom} \ab{𝑪} \ab{𝑩} such that \ab g = \ab{φ} \aof{∘} \ab h.
 A special case of this result that we use below is the fact that the setoid function factorization we saw above %---\ab f = %: \ab A \aor{⟶} \ab B factors as a surjective map
 %\ab{fromIm} \aof{∘} \ab{toIm}---% : \ab A \aor{⟶} \ab{Im} \ab f followed by an injective map \ab{fromIm} : \ab{Im} \ab f \aor{⟶} \ab B.
-lifts to factorization of homomorphisms. Moreover, we associate a homomorphism \ab h with its image---which is (the domain of) a subalgebra of the codomain of \ab h---using the function \ab{HomIm} defined below.\footnote{The definition of \ab{HomIm} was provided by an anonymous referee; it is indeed simpler than the general \af{HomFactor} theorem.}
+lifts to factorization of homomorphisms. Moreover, we associate a homomorphism \ab h with its image---which is (the domain of) a subalgebra of the codomain of \ab h---using the function \ab{HomIm} defined below.\footnote{The definition of \ab{HomIm} was provided by an anonymous referee.}
 
 \begin{code}
 
@@ -1012,15 +1011,12 @@ The subalgebra relation is reflexive, by the identity monomorphism (and transiti
 \end{code}
 %≤-transitive  :  {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{𝑪 : Algebra γ ρᶜ} → 𝑨 ≤ 𝑩 → 𝑩 ≤ 𝑪 → 𝑨 ≤ 𝑪
 %≤-transitive ( f , finj ) ( g , ginj ) = (∘-hom f g ) , ∘-IsInjective ∣ f ∣ ∣ g ∣ finj ginj
-If
-\ab{𝒜} : \ab I → \af{Algebra} \ab{α} \ab{ρᵃ},
-\ab{ℬ} : \ab I → \af{Algebra} \ab{β} \ab{ρᵇ} (families of \ab{𝑆}-algebras) and if
-\ab{ℬ} \ab i \af{≤} \ab{𝒜} \ab i for all \ab i~:~\ab I, then \af{⨅} \ab{ℬ} is a subalgebra
-of \af{⨅} \ab{𝒜}. Below we will use \af{⨅-≤} to denote this fact.
+%If \ab{𝒜} : \ab I → \af{Algebra} \ab{α} \ab{ρᵃ},
+%\ab{ℬ} : \ab I → \af{Algebra} \ab{β} \ab{ρᵇ} (families of \ab{𝑆}-algebras) and if
+%\ab{ℬ} \ab i \af{≤} \ab{𝒜} \ab i for all \ab i~:~\ab I, then \af{⨅} \ab{ℬ} is a subalgebra
+%of \af{⨅} \ab{𝒜}. Below we will use \af{⨅-≤} to denote this fact.
 
-We conclude this section with an easy fact that will be useful later;
-it simply converts a monomorphism into a proof of a subalgebra relationship.
-%The first converts a monomorphism to a subalgebra witness while the second is an algebraic invariance property of \aof{≤}.
+We conclude this subsection with a simple utility function that converts a monomorphism into a proof of a subalgebra relationship.
 
 \begin{code}
 
@@ -1070,7 +1066,7 @@ data Term (X : Type χ) : Type (ov χ)  where
 \paragraph*{The term algebra}
 We enrich the \ad{Term} type to a setoid of  \ab{𝑆}-terms, which will ultimately
 be the domain of an algebra, called the \emph{term algebra in the signature} \ab{𝑆}.
-For this we need an equivalence relation on terms.
+This requires an equivalence on terms.
 
 \begin{code}
 
@@ -1225,7 +1221,7 @@ module _ {X : Type χ}{ι : Level} {I : Type ι} (𝒜 : I → Algebra α ρᵃ)
 \section{Equational Logic}
 \label{equational-logic}
 %% -----------------------------------------------------------------------------
-\paragraph*{Term identities, equational theories, and the ⊧ relation}
+\subsection{Term identities, equational theories, and the ⊧ relation}
 %Given a signature \ab{𝑆} and a context \ab X,
 An \ab{𝑆}-\defn{term equation} (or \ab{𝑆}-\defn{term identity})
 is an ordered pair (\ab p , \ab q) of 𝑆-terms, also denoted by \ab p \af{≈} \ab q.
@@ -1280,6 +1276,7 @@ invariance under isomorphism).  We formalize this result as follows.
 \begin{code}
 
 module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : Term X) where
+
  ⊧-I-invar : 𝑨 ⊧ p ≈ q  →  𝑨 ≅ 𝑩  →  𝑩 ⊧ p ≈ q
  ⊧-I-invar Apq (mkiso fh gh f∼g g∼f) ρ = begin
   ⟦ p ⟧     ⟨$⟩             ρ    ≈˘⟨  cong ⟦ p ⟧ (f∼g ∘ ρ)        ⟩
@@ -1305,23 +1302,8 @@ Mod : {X : Type χ} → Pred(Term X × Term X) ℓ → Pred (Algebra α ρᵃ) _
 Mod ℰ 𝑨 = ∀ {p q} → (p , q) ∈ ℰ → Equal p q where open Environment 𝑨
 \end{code}
 
-\begin{comment}
-\paragraph*{Entailment}
-If \ab{ℰ} is a set of identities and \ab{p} and \ab{q} are terms,
-we say that \ab{ℰ} \defn{entails} \ab{p}~\aof{≈}~\ab{q} and write
-\ab{ℰ}~\ad{⊢}~\ab{p}~\ad{≈}~\ab{q} just in case every model of \ab{ℰ} also models
-\ab{p}~\aof{≈}~\ab{q}.
-We base our definition of \defn{entailment type} on the one in~\cite{Abel:2021}.  It contains cases for representing hypotheses, congruence of term
-application, that substitution respects entailment, and that entailment is
-an equivalence.
-begin{code}
-end{code}
-The fact that this represents the informal semantic notion of entailment given earlier is called \defn{soundness} and \defn{completeness}. More precisely, \defn{the entailment type is sound} means that \ab{ℰ}~\ad{⊢}~\ab{X}~\ad{▹}~\ab p~\ad{≈}~\ab q only if \ab p \aof{≈} \ab q in every model of \ab{ℰ}. \defn{The entailment type is complete} means \ab p \aof{≈} \ab q in every model of \ab{ℰ} only if \ab{ℰ}~\ad{⊢}~\ab{X}~\ad{▹}~\ab p~\aof{≈}~\ab q.
-We will use soundness of entailment only once below~(by the name \af{sound}), so we omit its proof (but see~\cite{Abel:2021} for details).
-\end{comment}
-
 %% -----------------------------------------------------------------------------
-\paragraph*{The Closure Operators H, S, P and V}
+\subsection{The Closure Operators H, S, P and V}
 Fix a signature \ab{𝑆}, let \ab{𝒦} be a class of \ab{𝑆}-algebras, and define
 \begin{itemize}
 \item \af H \ab{𝒦} := the class of all homomorphic images of members of \ab{𝒦};
@@ -1349,6 +1331,7 @@ and the type \af P to represent classes of algebras closed under the taking of a
 
 module _ {α ρᵃ β ρᵇ : Level} where
  private a = α ⊔ ρᵃ
+
  H : ∀ ℓ → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) → Pred(Algebra β ρᵇ) _
  H _ 𝒦 𝑩 = Σ[ 𝑨 ∈ Algebra α ρᵃ ] 𝑨 ∈ 𝒦 × 𝑩 IsHomImageOf 𝑨
 
@@ -1498,7 +1481,7 @@ module _ {X : Type χ}{ι : Level}(ℓ : Level){𝒦 : Pred(Algebra α ρᵃ)(α
 \section{Free Algebras}
 \label{free-algebras}
 %% -----------------------------------------------------------------------------
-\paragraph*{The absolutely free algebra}
+\subsection{The absolutely free algebra}
 The term algebra \af{𝑻} \ab X is the \emph{absolutely free} \ab{𝑆}-algebra over \ab X.
 That is, for every \ab{𝑆}-algebra \ab{𝑨}, the following hold.
 \begin{itemize}
@@ -1544,7 +1527,7 @@ module _  {X : Type χ} {𝑨 : Algebra α ρᵃ}   where
  free-lift-interp η (node f t)  = cong (Interp 𝑨) (≡.refl , (free-lift-interp η) ∘ t)
 \end{code}
 %% -----------------------------------------------------------------------------
-\paragraph*{The relatively free algebra}
+\subsection{The relatively free algebra}
 Given an arbitrary class \ab{𝒦} of \ab{𝑆}-algebras, we cannot expect that \T{X} belongs to \ab{𝒦}.
 %, so we say \T{X} is free \emph{for} \ab{𝒦} (as opposed to free \emph{in} \ab{𝒦}).
 Indeed, there may be no free algebra in \ab{𝒦}.
@@ -1619,9 +1602,9 @@ This natural epimorphism %from \T{X} onto \Free{X} %(= \T{X}~\af{/}~\afld{≈})
 is defined as follows.%
 %and prove that its kernel is contained in the collection of identities modeled
 %by \af{V} \ab{𝒦}.%(which we represent by \af{Th} (\af{V} \ab{𝒦})).
-\ifshort%
-\footnote{The \AgdaFunction{HomReduct} method of the \ar{IsEpi} record type extracts the \af{hom} part of an epimorphism.}
-\fi
+%\ifshort%
+%\footnote{The \AgdaFunction{HomReduct} method of the \ar{IsEpi} record type extracts the \af{hom} part of an epimorphism.}
+%\fi
 
 \begin{code}
 
@@ -1710,7 +1693,7 @@ statement and proof of this theorem---first in a style similar to
 what one finds in textbooks (e.g.,~\cite[Theorem 4.41]{Bergman:2012}),
 and then formally in the language of \mltt.
 %--------------------------------------
-\paragraph*{Informal proof}
+\subsection{Informal proof}
 
 %--------------------------------------
 \noindent (⇒) \textit{Every equational class is a variety}. Indeed, suppose \ab{𝒦} is an equational
@@ -1758,7 +1741,7 @@ so \ab{𝒦}~\af{⊫}~\ab p~\af{≈}~\ab q; thus, (\ab p , \ab q) \af{∈} \af{T
 that \ab h \ab u = (\af{⟦~\ab{𝑨}~⟧} \ab p) \aofld{⟨\$⟩} \ab{ρ} = (\af{⟦~\ab{𝑨}~⟧} \ab q)
 \aofld{⟨\$⟩} \ab{ρ} = \ab h \ab v, as desired.
 
-\paragraph*{Formal proof}
+\subsection{Formal proof}
 %We now show how to express and prove the twin assertions that
 %(⇐) every equational class is a variety and (⇒) every variety is an equational class.
 %% -----------------------------------------------------------------------------
@@ -1893,7 +1876,8 @@ Thus, every variety is an equational class.
 This completes the formal proof of Birkhoff's variety theorem. \hfill \qedsymbol
 
 %% -----------------------------------------------------------------------------
-\section{Discussion}\label{sec:discuss}
+\section{Conclusion}
+\subsection{Discussion}\label{sec:discuss}
 How do we differ from the classical, set-theoretic approach? Most noticeable is
 our avoidance of all \emph{size} issues. By using universe levels and level
 polymorphism, we always make sure we are in a \emph{large enough} universe.
@@ -1914,7 +1898,7 @@ by choosing \ab X to be the empty type \ab{⊥}, our surjectivity postulate give
 
 
 %% -----------------------------------------------------------------------------
-\section{Related work}
+\subsection{Related work}
 There have been a number of efforts to formalize parts of universal algebra in
 type theory besides ours. The Coq proof assistant, based on the Calculus of
 Inductive Constructions, was used by Capretta, in~\cite{Capretta:1999}, and
@@ -1933,69 +1917,9 @@ finitary operations was due to limitations of the UniMath type theory, which doe
 not have W-types nor user-defined inductive types.
 Abel also notes that Lynge and Spitters, in~\cite{Lynge:2019}, formalize multi-sorted
 algebras with finitary operators in \emph{Homotopy type theory} (\cite{HoTT}) using
-Coq.  HoTT's higher inductive types enable them to define quotients as types, without
+Coq~\cite{Coq:2004}.  HoTT's higher inductive types enable them to define quotients as types, without
 the need for setoids.  Lynge and Spitters prove three isomorphism theorems concerning
 subalgebras and quotient algebras, but do not formalize universal algebras nor varieties.
 Finally, in~\cite{Abel:2021}, Abel gives a new formal proof of the soundness and completeness
 theorem for multi-sorted algebraic structures.
 
-%Some other projects aimed at formalizing mathematics generally, and algebra in particular,
-% have developed into very extensive libraries that include definitions, theorems, and proofs
-% about algebraic structures, such as groups, rings, modules, etc.  However, the goals of these
-% efforts seem to be the formalization of special classical algebraic structures, as opposed
-% to the general theory of (universal) algebras. Moreover, the part of universal algebra and
-% equational logic formalized in the \agdaalgebras library extends beyond the scope of prior efforts.
-
-%Prior to our work, a constructive version of Birkhoff's theorem was published by
-% Carlstr\"om in~\cite{Carlstrom:2008}.  However, the logical foundations of that work is constructive set
-% theory and, as far as we know, there was no attempt to formalize it in type theory and verify
-% it with a proof assistant.
-
-
-% \section{Conclusion}
-
-% One positive outcome of this project is further evidence in support of dependent type theory and the \agda language. We have shown that, despite the technical demands they place on the user, these technologies are accessible to universal algebraists who possess sufficient patience and resolve to codify their work in type theory and verify their results with a proof assistant.
-
-
-
-
-
-
-
-
-
-
-
-
-
-\begin{comment}
-
-%The \defn{relatively free algebra over} \ab{X} (relative to
-%\ab{𝒦}) is defined to be the quotient \Free{X} := \T{X}~\af{/}~\afld{≈}.
-
-
-is the least equivalence relation on \T{X} such that
-on such that (1) ∀ (\ab p , \ab q) \af{∈} \af{Th} \ab{𝒦}, ∀ \ab{ρ} : \ab X \as{→} \Term{X}, \af{⟦~\ab p~⟧} \afld{⟨\$⟩} \ab{ρ} \afld{≈} \af{⟦~\ab q~⟧} \afld{⟨\$⟩} \ab{ρ}, and (2) \afld{≈} ∈ \af{Con} \T{X}.  Alternatively, }
-\footnote{More precisely, the equivalence relation on \T{X} generated by \ab{ℰ} is the least equivalence relation on \T{X} such that
-on such that (1) ∀ (\ab p , \ab q) \af{∈} \af{Th} \ab{𝒦}, ∀ \ab{ρ} : \ab X \as{→} \Term{X}, \af{⟦~\ab p~⟧} \afld{⟨\$⟩} \ab{ρ} \afld{≈} \af{⟦~\ab q~⟧} \afld{⟨\$⟩} \ab{ρ}, and (2) \afld{≈} ∈ \af{Con} \T{X}.  Alternatively, }
-proceeds by taking the quotient of \T{X} modulo the congruence relation \afld{≈} := \af{⋂}\{\ab{θ} \af{∈} \af{Con} (\T{X}) : \T{X} \af{/} \ab{θ} \af{∈} \af{S}
-\ab{𝒦}\}.\footnote{\af{Con} (\T{X}) denotes the congruences of \T{X}.}$^,$\footnote{Alternatively,
-we could let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
-on T(X) such that (1) ∀ (\ab p , \ab q) \af{∈} \af{Th} \ab{𝒦}, ∀ \ab{ρ} : \ab X \as{→} \Term{X}, \af{⟦~\ab p~⟧} \afld{⟨\$⟩} \ab{ρ} \afld{≈} \af{⟦~\ab q~⟧} \afld{⟨\$⟩} \ab{ρ}, and (2) \afld{≈} ∈ \af{Con} \T{X}}
-Equivalently, we could let \ab{ℰ} = \af{Th} \ab{𝒦} and take \afld{≈} to be the least equivalence relation
-on the domain of \T{X} such that
-\begin{enumerate}
-\item for every equation (\ab p , \ab q) \af{∈} \af{Th} \ab{𝒦} and every
-environment \ab{ρ} : \ab X \as{→} \Term{X}, we have\\
-\af{⟦~\ab p~⟧} \afld{⟨\$⟩} \ab{ρ} \afld{≈} \af{⟦~\ab q~⟧} \afld{⟨\$⟩} \ab{ρ}, and
-\item \afld{≈} is a congruence of \T{X}; that is, for every operation symbol \ab
-f : \af{∣~\ab{𝑆}~∣}, and for all tuples \ab{s} \ab{t} : \af{∥~\ab{𝑆}~∥} \ab f
-→ \Term{X}, the following implication holds:\footnote{Here all
-interpretations, denoted by \af{⟦\au{}⟧}, are with respect to \T{X}.}\\[-8pt]
-
-(∀ i → \af{⟦~\ab{s}~\ab i~⟧}~\afld{⟨\$⟩}~\ab{ρ}~\afld{≈}~\af{⟦~\ab{t}~\ab
-i~⟧}~\afld{⟨\$⟩}~\ab{ρ})
-\as{→} \af{⟦~\ab f~\ab s~⟧}~\afld{⟨\$⟩}~\ab{ρ}~\afld{≈}~\af{⟦~\ab f~\ab
-t~⟧}~\afld{⟨\$⟩}~\ab{ρ}\\[-8pt]
-\end{comment}
-%
